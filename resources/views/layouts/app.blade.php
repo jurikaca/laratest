@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="/assets/Ionicons/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="/assets/datatables.net-bs/css/dataTables.bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -211,6 +213,9 @@
 <script src="/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="/assets/jquery-knob/dist/jquery.knob.min.js"></script>
+
+<script src="/assets/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/assets/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- daterangepicker -->
 <script src="/assets/moment/min/moment.min.js"></script>
 <script src="/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
@@ -228,5 +233,8 @@
 {{--<script src="/js/pages/dashboard.js"></script>--}}
 <!-- AdminLTE for demo purposes -->
 {{--<script src="/js/demo.js"></script>--}}
+
+@yield('script')
+
 </body>
 </html>

@@ -21,12 +21,14 @@ class ItemController extends Controller
 
     public function create()
     {
-        $items = Item::pluck('name', 'id');
-        return view('items.create', compact('items'));
+        $vendors = Vendor::all();
+        $types = Type::all();
+        return view('items.create', compact('vendors'), compact('types'));
     }
 
     public function store(Request $request)
 {
+    echo json_encode($request);die;
     $rules = [
 //        'title' => ['required', 'min:20', 'max:200', 'unique:blogs'],
 //        'body' => ['required', 'min:200'],
