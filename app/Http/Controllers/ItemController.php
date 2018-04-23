@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Type;
 use App\Vendor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Item;
 
@@ -27,55 +28,46 @@ class ItemController extends Controller
     }
 
     public function store(Request $request)
-{
-    echo json_encode($request);die;
-    $rules = [
-//        'title' => ['required', 'min:20', 'max:200', 'unique:blogs'],
-//        'body' => ['required', 'min:200'],
-//        'photo_id' => ['mimes:jpeg,jpg,png', 'max:5000'],
-//        'category_id' => ['required'],
-//        'meta_desc' => ['required', 'min:10', 'max:300'],
-    ];
-
-    $message = [
-//        'photo_id.mimes' => 'Your image must be jpeg, jpg or png',
-//        'category_id.required' => 'The category field is required',
-//        'photo_id.max' => 'Your image should not be larger than 1mb',
-    ];
-
-//    $this->validate($request, $rules, $message);
-
-    $input = $request->all();
-
-    //dd($input);
-
-//    if ($file = $request->file('photo_id')) {
-//        $name = Carbon::now(). '.' .$file->getClientOriginalName();
-//        $file->move('images', $name);
-//        $photo = Photo::create(['photo' => $name, 'title' => $name]);
-//        $input['photo_id'] = $photo->id;
-//    }
-
-    $item = Item::create($input);
-//    if ($categoryIds = $request->category_id) {
-//        $blog->category()->sync($categoryIds);
-//    }
-
-//    notify()->flash('<h2>You have successfully created a Blog</h2>', 'success');
-
-    return redirect('item');
-}
-
-    public function show($id)
     {
-        $item = Item::whereSlug($id)->first();
-        return view('items.show', compact('item'));
+        $rules = [
+            'item_name' => ['required', 'min:3', 'max:200', 'unique:items'],
+            'vendor_id' => ['required'],
+            'type_id' => ['required'],
+            'serial_number' => ['required'],
+            'price' => ['required', 'numeric'],
+            'weight' => ['required', 'numeric'],
+            'release_date' => ['required'],
+            'file' => ['required','mimes:jpeg,jpg,png', 'max:1024'],
+        ];
+
+        $message = [
+            'vendor_id.required' => 'The vendor field is required',
+            'type_id.required' => 'The type field is required',
+            'file.max' => 'Your image should not be larger than 1mb',
+            'file.mimes' => 'Your image must be jpeg, jpg or png',
+        ];
+
+        $this->validate($request, $rules, $message);
+
+        $input = $request->all();
+
+        if ($file = $request->file('file')) {
+            $name = uniqid(). '_' .$file->getClientOriginalName();
+            $file->move('images', $name);
+            $input['photo'] = $name;
+        }
+
+        $item = Item::create($input);
+
+        notify()->flash('You have successfully created an item', 'success');
+
+        return redirect('items')->withInput();
     }
 
     public function edit($id)
     {
-        $types = Type::pluck('name', 'id');
-        $vendors = Vendor::pluck('name', 'id');
+        $vendors = Vendor::all();
+        $types = Type::all();
         $item = Item::findOrFail($id);
         return view('items.edit', compact('item', 'types', 'vendors', 'categories'));
     }
@@ -83,15 +75,21 @@ class ItemController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-//            'title' => ['required', 'min:20', 'max:200'],
-//            'body' => ['required', 'min:200'],
-//            'photo_id' => ['mimes:jpeg,jpg,png', 'max:5000'],
+            'item_name' => ['required', 'min:3', 'max:200'],
+            'vendor_id' => ['required'],
+            'type_id' => ['required'],
+            'serial_number' => ['required'],
+            'price' => ['required', 'numeric'],
+            'weight' => ['required', 'numeric'],
+            'release_date' => ['required'],
+            'file' => ['mimes:jpeg,jpg,png', 'max:1024'],
         ];
 
         $message = [
-//            'photo_id.mimes' => 'Your image must be jpeg, jpg or png',
-//            'category_id.required' => 'The category field is required',
-//            'photo_id.max' => 'Your image should not be larger than 1mb',
+            'vendor_id.required' => 'The vendor field is required',
+            'type_id.required' => 'The type field is required',
+            'file.max' => 'Your image should not be larger than 1mb',
+            'file.mimes' => 'Your image must be jpeg, jpg or png',
         ];
 
         $this->validate($request, $rules, $message);
@@ -99,33 +97,34 @@ class ItemController extends Controller
         $input = $request->all();
         $item = Item::findOrFail($id);
 
-//        if ($file = $request->file('photo_id')) {
-//
-//            if ($item->photo) {
-//                unlink('images/' . $item->photo->photo);
-//                $item->photo()->delete('photo');
-//            }
-//
-//            $name = Carbon::now(). '.' .$file->getClientOriginalName();
-//            $file->move('images', $name);
-//            $photo = Photo::create(['photo' => $name, 'title' => $name]);
-//            $input['photo_id'] = $photo->id;
-//        }
+        if ($file = $request->file('file')) {
+
+            if ($item->photo) {
+                unlink('images/' . $item->photo);
+            }
+
+            $name = uniqid(). '_' .$file->getClientOriginalName();
+            $file->move('images', $name);
+            $input['photo'] = $name;
+        }
 
         $item->update($input);
 
-//        notify()->flash('<h2>You have successfully edited a Blog</h2>', 'success');
+        notify()->flash('You have successfully edited an item', 'success');
 
-        return redirect('item')->withInput();
+        return redirect('items')->withInput();
     }
 
     public function destroy($id)
     {
         $item = Item::findOrFail($id);
-        $item->delete();
         if ($item->photo) {
             unlink('images/' . $item->photo);
         }
-        return redirect('item');
+        $item->delete();
+
+        notify()->flash('You have successfully deleted an item', 'success');
+
+        return redirect('items');
     }
 }

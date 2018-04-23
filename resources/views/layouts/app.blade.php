@@ -10,6 +10,10 @@
     <title>@yield('meta-title')</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/custom.css">
+
+
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="/assets/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -43,6 +47,8 @@
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!-- tagsinput -->
+    <link rel="stylesheet" href="/assets/bootstrap-tagsinput/bootstrap-tagsinput.css" />
 
     <!-- Scripts -->
     <script>
@@ -108,37 +114,10 @@
         <section class="sidebar">
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree">
-                {{--<li class="active treeview">--}}
-                    {{--<a href="#">--}}
-                        {{--<i class="fa fa-dashboard"></i> <span>Dashboard</span>--}}
-                        {{--<span class="pull-right-container">--}}
-                          {{--<i class="fa fa-angle-left pull-right"></i>--}}
-                        {{--</span>--}}
-                    {{--</a>--}}
-                    {{--<ul class="treeview-menu">--}}
-                        {{--<li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>--}}
-                        {{--<li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>--}}
-                    {{--</ul>--}}
-                {{--</li>--}}
-                {{--<li class="treeview">--}}
-                    {{--<a href="#">--}}
-                        {{--<i class="fa fa-files-o"></i>--}}
-                        {{--<span>Layout Options</span>--}}
-                        {{--<span class="pull-right-container">--}}
-                          {{--<span class="label label-primary pull-right">4</span>--}}
-                        {{--</span>--}}
-                    {{--</a>--}}
-                    {{--<ul class="treeview-menu">--}}
-                        {{--<li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>--}}
-                        {{--<li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>--}}
-                        {{--<li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>--}}
-                        {{--<li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>--}}
-                    {{--</ul>--}}
-                {{--</li>--}}
                 @if(Auth::user()->role === \App\User::ADMIN)
                     <li class="{{\Request::route()->getName() == 'dashboard.index' ? 'active' : ''}}">
                         <a href="{{ route('dashboard.index') }}">
-                            <i class="fa fa-files-o"></i>
+                            <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
@@ -151,23 +130,23 @@
                         </a>
                     </li>
                 @endif
-                <li class="{{\Request::route()->getName() == 'items' ? 'active' : ''}}">
-                    <a href="{{ route('items') }}">
+                <li class="{{\Request::route()->getName() == 'items.index' ? 'active' : ''}}">
+                    <a href="{{ route('items.index') }}">
                         <i class="fa fa-list"></i>
                         <span>Items</span>
                     </a>
                 </li>
                 @if(Auth::user()->role === \App\User::ADMIN)
-                <li class="{{\Request::route()->getName() == 'types' ? 'active' : ''}}">
-                    <a href="{{ route('types') }}">
-                        <i class="fa fa-files-o"></i>
+                <li class="{{\Request::route()->getName() == 'types.index' ? 'active' : ''}}">
+                    <a href="{{ route('types.index') }}">
+                        <i class="fa fa-th"></i>
                         <span>Types</span>
                     </a>
                 </li>
                 @endif
-                <li class="{{\Request::route()->getName() == 'vendors' ? 'active' : ''}}">
-                    <a href="{{ route('vendors') }}">
-                        <i class="fa fa-files-o"></i>
+                <li class="{{\Request::route()->getName() == 'vendors.index' ? 'active' : ''}}">
+                    <a href="{{ route('vendors.index') }}">
+                        <i class="fa fa-cubes"></i>
                         <span>Vendors</span>
                     </a>
                 </li>
@@ -183,13 +162,6 @@
 
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>Version</b> 2.4.0
-        </div>
-        <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-        reserved.
-    </footer>
 </div>
 <!-- ./wrapper -->
 
@@ -229,10 +201,23 @@
 <script src="/assets/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="/js/adminlte.min.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-{{--<script src="/js/pages/dashboard.js"></script>--}}
-<!-- AdminLTE for demo purposes -->
-{{--<script src="/js/demo.js"></script>--}}
+<!-- tagsinput -->
+<script src="/assets/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+
+    @if (notify()->ready())
+        swal({
+            title: "{!! notify()->message() !!}",
+            type: "{{ notify()->type() }}",
+            @if (notify()->option('timer'))
+                timer: "{{ notify()->option('timer') }}",
+                showConfirmButton: false,
+            @endif
+            html : true
+        });
+    @endif
+</script>
 
 @yield('script')
 

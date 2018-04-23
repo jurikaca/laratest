@@ -14,13 +14,10 @@
 Auth::routes();
 Route::get('/', 'ItemController@index')->name('items');
 
+Route::resource('items', 'ItemController');
+Route::resource('types', 'TypeController');
+Route::resource('vendors', 'VendorController');
 
-Route::get('/items', 'ItemController@index')->name('items');
-Route::get('/items/create', 'ItemController@create')->name('items.create');
-Route::post('/items/store', 'ItemController@store')->name('items.store');
-
-Route::get('/types', 'TypeController@index')->name('types');
-Route::get('/vendors', 'VendorController@index')->name('vendors');
 Route::get('/users', 'UserController@index')->name('users.index');
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
