@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Type;
 use Illuminate\Http\Request;
+use Auth;
 
 class TypeController extends Controller
 {
@@ -31,6 +32,8 @@ class TypeController extends Controller
         $this->validate($request, $rules);
 
         $input = $request->all();
+
+        $input['creator_id'] = Auth::user()->id;
 
         $type = Type::create($input);
 

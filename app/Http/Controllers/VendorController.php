@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Vendor;
 use Illuminate\Http\Request;
+use Auth;
 
 class VendorController extends Controller
 {
@@ -13,7 +14,9 @@ class VendorController extends Controller
     }
 
     public function index(){
-        $vendors = Vendor::all();
+        $vendors = Vendor::where([
+            'creator_id'    =>  Auth::user()->id
+        ])->get();
         return view('vendors.index', compact('vendors'));
     }
 
@@ -37,6 +40,7 @@ class VendorController extends Controller
         $this->validate($request, $rules, $message);
 
         $input = $request->all();
+        $input['creator_id'] = Auth::user()->id;
 
         if ($file = $request->file('file')) {
             $name = uniqid(). '_' .$file->getClientOriginalName();

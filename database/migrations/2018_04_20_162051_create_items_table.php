@@ -18,6 +18,7 @@ class CreateItemsTable extends Migration
             $table->string('item_name');
             $table->integer('vendor_id')->unsigned();
             $table->integer('type_id')->unsigned();
+            $table->integer('creator_id')->unsigned();
             $table->string('serial_number');
             $table->decimal('price',11,2);
             $table->decimal('weight',11,2);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vendor extends Model
 {
-    protected $fillable = ['name', 'logo'];
+    protected $fillable = ['name', 'logo', 'creator_id'];
     public $timestamps = false;
 
     public function item()

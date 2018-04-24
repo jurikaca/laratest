@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Type;
+use App\User;
 use App\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Item;
+use Auth;
 
 class ItemController extends Controller
 {
@@ -16,7 +18,13 @@ class ItemController extends Controller
     }
 
     public function index(){
-        $items = Item::all();
+        if(Auth::user()->role == User::ADMIN){
+            $items = Item::all();
+        }else{
+            $items = Item::where([
+                'creator_id'    =>  Auth::user()->id
+            ])->get();
+        }
         return view('items.index', compact('items'));
     }
 
@@ -56,6 +64,8 @@ class ItemController extends Controller
             $file->move('images', $name);
             $input['photo'] = $name;
         }
+
+        $input['creator_id'] = Auth::user()->id;
 
         $item = Item::create($input);
 
@@ -112,7 +122,7 @@ class ItemController extends Controller
 
         notify()->flash('You have successfully edited an item', 'success');
 
-        return redirect('items')->withInput();
+        return redirect('items.index')->withInput();
     }
 
     public function destroy($id)
@@ -125,6 +135,6 @@ class ItemController extends Controller
 
         notify()->flash('You have successfully deleted an item', 'success');
 
-        return redirect('items');
+        return redirect('items.index');
     }
 }

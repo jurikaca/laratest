@@ -17,7 +17,9 @@ Route::get('/', 'ItemController@index')->name('items');
 Route::resource('items', 'ItemController');
 Route::resource('types', 'TypeController');
 Route::resource('vendors', 'VendorController');
+Route::resource('users', 'UserController');
 
-Route::get('/users', 'UserController@index')->name('users.index');
+Route::post('users/change_user_role', 'UserController@change_user_role')->name('users.change_user_role');
+Route::post('users/change_user_active', 'UserController@change_user_active')->name('users.change_user_active');
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');

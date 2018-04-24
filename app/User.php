@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'username', 'isActive', 'password', 'role',
     ];
 
     /**
@@ -28,4 +28,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function getRoles(){
+        return [
+            User::ADMIN =>  User::ADMIN,
+            User::REGULAR =>  User::REGULAR,
+        ];
+    }
 }

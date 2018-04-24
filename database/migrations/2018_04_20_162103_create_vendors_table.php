@@ -16,6 +16,7 @@ class CreateVendorsTable extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->integer('creator_id')->unsigned();
             $table->string('logo')->nullable();
         });
     }

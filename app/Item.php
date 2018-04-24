@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
-    protected $fillable = ['item_name', 'vendor_id', 'type_id', 'serial_number', 'price', 'weight', 'color', 'release_date', 'tags', 'photo'];
+    protected $fillable = ['item_name', 'vendor_id', 'type_id', 'serial_number', 'price', 'weight', 'color', 'release_date', 'tags', 'photo', 'creator_id'];
 
     public function vendor(){
         return $this->belongsTo(Vendor::class);
