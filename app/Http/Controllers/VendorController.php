@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
 use Auth;
@@ -10,13 +11,18 @@ class VendorController extends Controller
 {
     public function __construct()
     {
-
+        $this->middleware('auth');
+        $this->middleware('regular', ['only' => ['create', 'store']]);
     }
 
     public function index(){
-        $vendors = Vendor::where([
-            'creator_id'    =>  Auth::user()->id
-        ])->get();
+        if(Auth::user()->role == User::ADMIN){
+            $vendors = Vendor::all();
+        }else{
+            $vendors = Vendor::where([
+                'creator_id'    =>  Auth::user()->id
+            ])->get();
+        }
         return view('vendors.index', compact('vendors'));
     }
 
@@ -64,8 +70,8 @@ class VendorController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required', 'min:1', 'max:200'],
-            'file' => ['required','mimes:jpeg,jpg,png', 'max:1024'],
+            'name' => ['required', 'min:1', 'max:200', 'unique:vendors,name,'.$id],
+            'file' => ['mimes:jpeg,jpg,png', 'max:1024'],
         ];
 
         $message = [

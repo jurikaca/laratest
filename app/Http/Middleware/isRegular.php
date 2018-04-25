@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use App\User;
 use Closure;
 
-class isAdmin
+class isRegular
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class isAdmin
     public function handle($request, Closure $next)
     {
         $user = $request->user();
-        if ($user->role == User::ADMIN) {
+        if ($user->role == User::REGULAR) {
             return $next($request);
         }
         notify()->flash('You have no access here', 'error');

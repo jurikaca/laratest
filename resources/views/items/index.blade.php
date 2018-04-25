@@ -6,11 +6,13 @@
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title">Items List</h3>
-                <div class="pull-right box-tools">
-                    <a href="{{ route('items.create') }}" class="btn btn-info btn-sm">
-                        <i class="fa fa-plus"></i> New Item
-                    </a>
-                </div>
+                @if(\Illuminate\Support\Facades\Auth::user()->role != \App\User::ADMIN)
+                    <div class="pull-right box-tools">
+                        <a href="{{ route('items.create') }}" class="btn btn-info btn-sm">
+                            <i class="fa fa-plus"></i> New Item
+                        </a>
+                    </div>
+                @endif
             </div>
             <!-- /.box-header -->
             <div class="box-body">

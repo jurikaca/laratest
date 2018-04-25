@@ -15,6 +15,7 @@ class ItemController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('regular', ['only' => ['create', 'store']]);
     }
 
     public function index(){
@@ -122,7 +123,7 @@ class ItemController extends Controller
 
         notify()->flash('You have successfully edited an item', 'success');
 
-        return redirect('items.index')->withInput();
+        return redirect('items')->withInput();
     }
 
     public function destroy($id)
@@ -135,6 +136,6 @@ class ItemController extends Controller
 
         notify()->flash('You have successfully deleted an item', 'success');
 
-        return redirect('items.index');
+        return redirect('items');
     }
 }
