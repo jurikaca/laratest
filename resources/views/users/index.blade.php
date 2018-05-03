@@ -69,6 +69,9 @@
                     </tr>
                     </tfoot>
                 </table>
+                <form style="display: none;">
+                    <input type="hidden" name="csrf_token" id="csrf_token" value = "{{ csrf_token() }}"/>
+                </form>
             </div>
             <!-- /.box-body -->
         </div>
@@ -77,57 +80,5 @@
 @endsection
 
 @section('script')
-    <script>
-        $(document).ready(function(){
-            $('#users_table').DataTable();
-            $('.delete_user').click(function(){
-                if(window.confirm('Are you sure to delete this user?')){
-                    $(this).parent().find('form').submit();
-                }
-            });
-            $('.role_select').change(function(){
-                var role = $(this).find('option:selected').val();
-                var user_id = $(this).attr('data-user_id');
-                $.post(
-                    '{{ route('users.change_user_role') }}',
-                    {
-                        role        :   role,
-                        user_id     :   user_id,
-                        _token      :   '{{ csrf_token() }}'
-                    },
-                    function(result){
-                        if(result.success){
-                            swal({
-                                title: result.msg,
-                                type: "success",
-                                html : true
-                            });
-                        }
-                });
-            })
-            $('.active_checkbox').change(function(){
-                var active = $(this).is(':checked');
-                var user_id = $(this).attr('data-user_id');
-                if(active){
-                    active = 1;
-                }
-                $.post(
-                    '{{ route('users.change_user_active') }}',
-                    {
-                        active      :   active,
-                        user_id     :   user_id,
-                        _token      :   '{{ csrf_token() }}'
-                    },
-                    function(result){
-                        if(result.success){
-                            swal({
-                                title: result.msg,
-                                type: "success",
-                                html : true
-                            });
-                        }
-                });
-            })
-        });
-    </script>
+    <script src="/js/users.index.js"></script>
 @endsection

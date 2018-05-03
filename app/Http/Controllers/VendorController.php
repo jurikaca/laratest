@@ -35,7 +35,7 @@ class VendorController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => ['required', 'min:1', 'max:200', 'unique:vendors'],
+            'name' => ['required', 'min:1', 'max:200', 'unique:vendors,name,NULL,id,creator_id,'.Auth::user()->id],
             'file' => ['required','mimes:jpeg,jpg,png', 'max:1024'],
         ];
 

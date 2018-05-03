@@ -32,7 +32,13 @@ class ItemController extends Controller
 
     public function create()
     {
-        $vendors = Vendor::all();
+        if(Auth::user()->role == User::ADMIN){
+            $vendors = Vendor::all();
+        }else{
+            $vendors = Vendor::where([
+                'creator_id'    =>  Auth::user()->id
+            ])->get();
+        }
         $types = Type::all();
         return view('items.create', compact('vendors'), compact('types'));
     }
@@ -78,7 +84,13 @@ class ItemController extends Controller
 
     public function edit($id)
     {
-        $vendors = Vendor::all();
+        if(Auth::user()->role == User::ADMIN){
+            $vendors = Vendor::all();
+        }else{
+            $vendors = Vendor::where([
+                'creator_id'    =>  Auth::user()->id
+            ])->get();
+        }
         $types = Type::all();
         $item = Item::findOrFail($id);
         if(Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id){
