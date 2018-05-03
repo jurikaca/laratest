@@ -14,7 +14,8 @@ class UserController extends Controller
         $this->middleware('admin');
     }
 
-    public function index(){
+    public function index()
+    {
         $users = User::all();
         $roles = User::getRoles();
         return view('users.index', compact('users'), compact('roles'));
@@ -93,7 +94,8 @@ class UserController extends Controller
         return redirect('users');
     }
 
-    public function change_user_role(Request $request){
+    public function change_user_role(Request $request)
+    {
         $input = $request->all();
         $user = User::findOrFail($input['user_id']);
         $user->role = $input['role'];
@@ -104,7 +106,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function change_user_active(Request $request){
+    public function change_user_active(Request $request)
+    {
         $input = $request->all();
         $user = User::findOrFail($input['user_id']);
         if(isset($input['active']) && $input['active'] == 1){

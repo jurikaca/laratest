@@ -17,7 +17,7 @@ class AddForeignKeys extends Migration
             $table->index('vendor_id');
             $table->index('type_id');
             $table->index('creator_id');
-            $table->foreign('vendor_id')->references('id')->on('vendors');
+            $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
             $table->foreign('creator_id')->references('id')->on('users');
             $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
         });

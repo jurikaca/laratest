@@ -18,7 +18,8 @@ class ItemController extends Controller
         $this->middleware('regular', ['only' => ['create', 'store']]);
     }
 
-    public function index(){
+    public function index()
+    {
         if(Auth::user()->role == User::ADMIN){
             $items = Item::all();
         }else{
@@ -45,7 +46,7 @@ class ItemController extends Controller
             'serial_number' => ['required'],
             'price' => ['required', 'numeric'],
             'weight' => ['required', 'numeric'],
-            'release_date' => ['required'],
+            'release_date' => ['required','after:' . date('Y-m-d',strtotime(date('Y-m-d')." - 1 days")) . '','date_format:Y-m-d'],
             'file' => ['required','mimes:jpeg,jpg,png', 'max:1024'],
         ];
 
@@ -80,6 +81,10 @@ class ItemController extends Controller
         $vendors = Vendor::all();
         $types = Type::all();
         $item = Item::findOrFail($id);
+        if(Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id){
+            notify()->flash('You dont have permission to edit this item', 'warning');
+            return redirect('items');
+        }
         return view('items.edit', compact('item', 'types', 'vendors', 'categories'));
     }
 
@@ -107,6 +112,10 @@ class ItemController extends Controller
 
         $input = $request->all();
         $item = Item::findOrFail($id);
+        if(Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id){
+            notify()->flash('You dont have permission to edit this item', 'warning');
+            return redirect('items');
+        }
 
         if ($file = $request->file('file')) {
 
@@ -129,6 +138,10 @@ class ItemController extends Controller
     public function destroy($id)
     {
         $item = Item::findOrFail($id);
+        if(Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id){
+            notify()->flash('You dont have permission to delete this item', 'warning');
+            return redirect('items');
+        }
         if ($item->photo) {
             unlink('images/' . $item->photo);
         }

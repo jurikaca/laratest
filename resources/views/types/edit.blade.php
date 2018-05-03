@@ -34,14 +34,3 @@
     </section>
 
 @endsection
-
-@section('script')
-    <script>
-        //Date picker
-        $('#release_date').datepicker({
-            autoclose: true,
-            format : 'yyyy-mm-dd'
-        })
-        $("#tags").tagsinput();
-    </script>
-@endsection

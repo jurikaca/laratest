@@ -29,7 +29,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public static function getRoles(){
+    public static function getRoles()
+    {
         return [
             User::ADMIN =>  User::ADMIN,
             User::REGULAR =>  User::REGULAR,

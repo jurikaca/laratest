@@ -13,7 +13,8 @@ class DashboardController extends Controller
         $this->middleware('admin');
     }
 
-    public function index(){
+    public function index()
+    {
         return view('dashboard.index',[
             'num_items'         =>  Item::all()->count(),
             'average_price'     =>  round(Item::avg('price'),2),

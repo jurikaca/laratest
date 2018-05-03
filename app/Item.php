@@ -9,15 +9,18 @@ class Item extends Model
 {
     protected $fillable = ['item_name', 'vendor_id', 'type_id', 'serial_number', 'price', 'weight', 'color', 'release_date', 'tags', 'photo', 'creator_id'];
 
-    public function vendor(){
+    public function vendor()
+    {
         return $this->belongsTo(Vendor::class);
     }
 
-    public function type(){
+    public function type()
+    {
         return $this->belongsTo(Type::class);
     }
 
-    static public function get_items_per_type(){
+    static public function get_items_per_type()
+    {
         $SQL = "
         SELECT
             types.`name` as type,

@@ -43,7 +43,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="price">Item Price</label>
-                                <input type="number" class="form-control" name="price" id="price" placeholder="Enter price " value = "{{ $item->price }}">
+                                <input type="number" step=any class="form-control" name="price" id="price" placeholder="Enter price " value = "{{ $item->price }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="weight">Item Weight</label>
@@ -92,12 +92,5 @@
 @endsection
 
 @section('script')
-    <script>
-        //Date picker
-        $('#release_date').datepicker({
-            autoclose: true,
-            format : 'yyyy-mm-dd'
-        })
-        $("#tags").tagsinput();
-    </script>
+    <script src="/js/items.form.js"></script>
 @endsection

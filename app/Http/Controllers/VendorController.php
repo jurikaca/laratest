@@ -15,7 +15,8 @@ class VendorController extends Controller
         $this->middleware('regular', ['only' => ['create', 'store']]);
     }
 
-    public function index(){
+    public function index()
+    {
         if(Auth::user()->role == User::ADMIN){
             $vendors = Vendor::all();
         }else{
@@ -64,6 +65,10 @@ class VendorController extends Controller
     public function edit($id)
     {
         $vendor = Vendor::findOrFail($id);
+        if(Auth::user()->role != User::ADMIN && $vendor->creator_id != Auth::user()->id){
+            notify()->flash('You dont have permission to edit this vendor', 'warning');
+            return redirect('vendors');
+        }
         return view('vendors.edit', compact('vendor'));
     }
 
@@ -83,6 +88,10 @@ class VendorController extends Controller
 
         $input = $request->all();
         $vendor = Vendor::findOrFail($id);
+        if(Auth::user()->role != User::ADMIN && $vendor->creator_id != Auth::user()->id){
+            notify()->flash('You dont have permission to edit this vendor', 'warning');
+            return redirect('vendors');
+        }
 
         if ($file = $request->file('file')) {
 
@@ -105,6 +114,10 @@ class VendorController extends Controller
     public function destroy($id)
     {
         $vendor = Vendor::findOrFail($id);
+        if(Auth::user()->role != User::ADMIN && $vendor->creator_id != Auth::user()->id){
+            notify()->flash('You dont have permission to delete this vendor', 'warning');
+            return redirect('vendors');
+        }
         if ($vendor->logo) {
             unlink('vendors_img/' . $vendor->logo);
         }

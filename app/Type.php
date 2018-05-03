@@ -9,7 +9,8 @@ class Type extends Model
     protected $fillable = ['name', 'creator_id'];
     public $timestamps = false;
 
-    public function item(){
+    public function item()
+    {
         return $this->belongsTo(Item::class);
     }
 }
