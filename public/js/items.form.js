@@ -1,6 +1,6 @@
 //Date picker
 $('#release_date').datepicker({
-    startDate: 'today',
+    endDate: 'today',
     autoclose: true,
     format : 'yyyy-mm-dd'
 })

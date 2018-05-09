@@ -20,9 +20,11 @@ class ItemController extends Controller
 
     public function index()
     {
-        if(Auth::user()->role == User::ADMIN){
+        if (Auth::user()->role == User::ADMIN)
+        {
             $items = Item::all();
-        }else{
+        }
+        else{
             $items = Item::where([
                 'creator_id'    =>  Auth::user()->id
             ])->get();
@@ -32,9 +34,11 @@ class ItemController extends Controller
 
     public function create()
     {
-        if(Auth::user()->role == User::ADMIN){
+        if (Auth::user()->role == User::ADMIN)
+        {
             $vendors = Vendor::all();
-        }else{
+        }
+        else{
             $vendors = Vendor::where([
                 'creator_id'    =>  Auth::user()->id
             ])->get();
@@ -52,7 +56,7 @@ class ItemController extends Controller
             'serial_number' => ['required'],
             'price' => ['required', 'numeric'],
             'weight' => ['required', 'numeric'],
-            'release_date' => ['required','after:' . date('Y-m-d',strtotime(date('Y-m-d')." - 1 days")) . '','date_format:Y-m-d'],
+            'release_date' => ['required','before:' . date('Y-m-d',strtotime(date('Y-m-d')." + 1 days")) . '','date_format:Y-m-d'],
             'file' => ['required','mimes:jpeg,jpg,png', 'max:1024'],
         ];
 
@@ -67,7 +71,8 @@ class ItemController extends Controller
 
         $input = $request->all();
 
-        if ($file = $request->file('file')) {
+        if ($file = $request->file('file'))
+        {
             $name = uniqid(). '_' .$file->getClientOriginalName();
             $file->move('images', $name);
             $input['photo'] = $name;
@@ -84,16 +89,19 @@ class ItemController extends Controller
 
     public function edit($id)
     {
-        if(Auth::user()->role == User::ADMIN){
+        if (Auth::user()->role == User::ADMIN)
+        {
             $vendors = Vendor::all();
-        }else{
+        }
+        else{
             $vendors = Vendor::where([
                 'creator_id'    =>  Auth::user()->id
             ])->get();
         }
         $types = Type::all();
         $item = Item::findOrFail($id);
-        if(Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id){
+        if (Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id)
+        {
             notify()->flash('You dont have permission to edit this item', 'warning');
             return redirect('items');
         }
@@ -109,7 +117,7 @@ class ItemController extends Controller
             'serial_number' => ['required'],
             'price' => ['required', 'numeric'],
             'weight' => ['required', 'numeric'],
-            'release_date' => ['required'],
+            'release_date' => ['required','before:' . date('Y-m-d',strtotime(date('Y-m-d')." + 1 days")) . '','date_format:Y-m-d'],
             'file' => ['mimes:jpeg,jpg,png', 'max:1024'],
         ];
 
@@ -124,14 +132,17 @@ class ItemController extends Controller
 
         $input = $request->all();
         $item = Item::findOrFail($id);
-        if(Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id){
+        if (Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id)
+        {
             notify()->flash('You dont have permission to edit this item', 'warning');
             return redirect('items');
         }
 
-        if ($file = $request->file('file')) {
+        if ($file = $request->file('file'))
+        {
 
-            if ($item->photo) {
+            if ($item->photo)
+            {
                 unlink('images/' . $item->photo);
             }
 
@@ -150,11 +161,13 @@ class ItemController extends Controller
     public function destroy($id)
     {
         $item = Item::findOrFail($id);
-        if(Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id){
+        if (Auth::user()->role != User::ADMIN && $item->creator_id != Auth::user()->id)
+        {
             notify()->flash('You dont have permission to delete this item', 'warning');
             return redirect('items');
         }
-        if ($item->photo) {
+        if ($item->photo)
+        {
             unlink('images/' . $item->photo);
         }
         $item->delete();

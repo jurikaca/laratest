@@ -47,7 +47,8 @@ class TypeController extends Controller
     public function edit($id)
     {
         $type = Type::findOrFail($id);
-        if(Auth::user()->role != User::ADMIN && $type->creator_id != Auth::user()->id){
+        if (Auth::user()->role != User::ADMIN && $type->creator_id != Auth::user()->id)
+        {
             notify()->flash('You dont have permission to edit this type', 'warning');
             return redirect('types');
         }
@@ -64,7 +65,8 @@ class TypeController extends Controller
 
         $input = $request->all();
         $type = Type::findOrFail($id);
-        if(Auth::user()->role != User::ADMIN && $type->creator_id != Auth::user()->id){
+        if (Auth::user()->role != User::ADMIN && $type->creator_id != Auth::user()->id)
+        {
             notify()->flash('You dont have permission to edit this type', 'warning');
             return redirect('types');
         }
@@ -79,7 +81,8 @@ class TypeController extends Controller
     public function destroy($id)
     {
         $type = Type::findOrFail($id);
-        if(Auth::user()->role != User::ADMIN && $type->creator_id != Auth::user()->id){
+        if (Auth::user()->role != User::ADMIN && $type->creator_id != Auth::user()->id)
+        {
             notify()->flash('You dont have permission to delete this type', 'warning');
             return redirect('types');
         }

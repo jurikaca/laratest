@@ -17,7 +17,8 @@ class isAdmin
     public function handle($request, Closure $next)
     {
         $user = $request->user();
-        if ($user->role == User::ADMIN) {
+        if($user->role == User::ADMIN)
+        {
             return $next($request);
         }
         notify()->flash('You have no access here', 'error');

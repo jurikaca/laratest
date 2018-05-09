@@ -17,7 +17,8 @@ class isRegular
     public function handle($request, Closure $next)
     {
         $user = $request->user();
-        if ($user->role == User::REGULAR) {
+        if($user->role == User::REGULAR)
+        {
             return $next($request);
         }
         notify()->flash('You have no access here', 'error');

@@ -17,9 +17,11 @@ class VendorController extends Controller
 
     public function index()
     {
-        if(Auth::user()->role == User::ADMIN){
+        if (Auth::user()->role == User::ADMIN)
+        {
             $vendors = Vendor::all();
-        }else{
+        }
+        else{
             $vendors = Vendor::where([
                 'creator_id'    =>  Auth::user()->id
             ])->get();
@@ -49,7 +51,8 @@ class VendorController extends Controller
         $input = $request->all();
         $input['creator_id'] = Auth::user()->id;
 
-        if ($file = $request->file('file')) {
+        if ($file = $request->file('file'))
+        {
             $name = uniqid(). '_' .$file->getClientOriginalName();
             $file->move('vendors_img', $name);
             $input['logo'] = $name;
@@ -65,7 +68,8 @@ class VendorController extends Controller
     public function edit($id)
     {
         $vendor = Vendor::findOrFail($id);
-        if(Auth::user()->role != User::ADMIN && $vendor->creator_id != Auth::user()->id){
+        if (Auth::user()->role != User::ADMIN && $vendor->creator_id != Auth::user()->id)
+        {
             notify()->flash('You dont have permission to edit this vendor', 'warning');
             return redirect('vendors');
         }
@@ -88,14 +92,17 @@ class VendorController extends Controller
 
         $input = $request->all();
         $vendor = Vendor::findOrFail($id);
-        if(Auth::user()->role != User::ADMIN && $vendor->creator_id != Auth::user()->id){
+        if (Auth::user()->role != User::ADMIN && $vendor->creator_id != Auth::user()->id)
+        {
             notify()->flash('You dont have permission to edit this vendor', 'warning');
             return redirect('vendors');
         }
 
-        if ($file = $request->file('file')) {
+        if ($file = $request->file('file'))
+        {
 
-            if ($vendor->logo) {
+            if ($vendor->logo)
+            {
                 unlink('vendors_img/' . $vendor->photo);
             }
 
@@ -114,11 +121,13 @@ class VendorController extends Controller
     public function destroy($id)
     {
         $vendor = Vendor::findOrFail($id);
-        if(Auth::user()->role != User::ADMIN && $vendor->creator_id != Auth::user()->id){
+        if (Auth::user()->role != User::ADMIN && $vendor->creator_id != Auth::user()->id)
+        {
             notify()->flash('You dont have permission to delete this vendor', 'warning');
             return redirect('vendors');
         }
-        if ($vendor->logo) {
+        if ($vendor->logo)
+        {
             unlink('vendors_img/' . $vendor->logo);
         }
         $vendor->delete();

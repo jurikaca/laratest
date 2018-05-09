@@ -64,14 +64,17 @@ class UserController extends Controller
             'role' => ['required'],
         ];
         $input = $request->all();
-        if($input['password'] == ''){
+        if ($input['password'] == '')
+        {
             unset($input['password']);
-        }else{
+        }
+        else{
             $rules['password'] = ['required', 'min:5'];
         }
 
         $this->validate($request, $rules);
-        if(isset($input['password'])){
+        if (isset($input['password']))
+        {
             $input['password'] = bcrypt($input['password']);
         }
 
@@ -110,9 +113,11 @@ class UserController extends Controller
     {
         $input = $request->all();
         $user = User::findOrFail($input['user_id']);
-        if(isset($input['active']) && $input['active'] == 1){
+        if (isset($input['active']) && $input['active'] == 1)
+        {
             $user->isActive = 1;
-        }else{
+        }
+        else{
             $user->isActive = 0;
         }
         $user->update();
